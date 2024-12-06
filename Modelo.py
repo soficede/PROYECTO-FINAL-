@@ -315,6 +315,9 @@ class Alerta:
         except mysql.connector.Error as err:
             print(f"Error al eliminar la alerta: {err}")
 
+from datetime import datetime, timedelta
+import mysql.connector
+
 class SeguimientoMedicamento:
     def __init__(self, medicamento_id, fecha_ingreso, frecuencia, stock):
         self.medicamento_id = medicamento_id
@@ -399,3 +402,51 @@ class SeguimientoMedicamento:
         except mysql.connector.Error as err:
             print(f"Error al guardar el seguimiento en la base de datos: {err}")
             return False
+
+    def verSeguimientos(self, medicamento_id=None):
+        """
+        Busca y lista los seguimientos de medicamentos en la base de datos.
+        Si se pasa un medicamento_id, devuelve solo los seguimientos de ese medicamento.
+        Si no, devuelve todos los seguimientos.
+        """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor(dictionary=True)
+
+            if medicamento_id:
+                # Buscar seguimientos de un medicamento específico
+                cursor.execute(
+                    "SELECT sm.*, m.nombre FROM seguimiento_medicamentos sm "
+                    "JOIN medicamentos m ON sm.medicamento_id = m.id "
+                    "WHERE sm.medicamento_id = %s", (medicamento_id,)
+                )
+            else:
+                # Buscar todos los seguimientos
+                cursor.execute(
+                    "SELECT sm.*, m.nombre FROM seguimiento_medicamentos sm "
+                    "JOIN medicamentos m ON sm.medicamento_id = m.id"
+                )
+
+            seguimientos = cursor.fetchall()
+            conexion.close()
+
+            # Mostrar seguimientos
+            if not seguimientos:
+                print("No se encontraron seguimientos.")
+                return
+
+            for seguimiento in seguimientos:
+                print(f"ID Seguimiento: {seguimiento['id']}")
+                print(f"Medicamento: {seguimiento['nombre']} (ID: {seguimiento['medicamento_id']})")
+                print(f"Fecha de Inicio: {seguimiento['fecha_inicio']}")
+                print(f"Fecha Final: {seguimiento['fecha_final']}")
+                print(f"Stock Final: {seguimiento['stock_final']}")
+                print(f"Frecuencia: Cada {seguimiento['frecuencia']} horas")
+                print("-" * 40)
+        except mysql.connector.Error as err:
+            print(f"Error al buscar seguimientos: {err}")
