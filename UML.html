@@ -158,22 +158,23 @@
     </div>
 
     <div class="class-box">
-        <h3>Seguimiento</h3>
+        <h3>SeguimientoMedicamento</h3>
         <div class="attributes">
             <strong>Atributos:</strong>
             <ul>
-                <li>id: int</li>
-                <li>usuario: Usuario</li>
-                <li>medicamento: Medicamento</li>
-                <li>horaUltimaDosis: DateTime</li>
-                <li>proximaDosis: DateTime</li>
+                <li>medicamento_id: int</li>
+                <li>fecha_inicio: Date</li>
+                <li>fecha_final: Date </li>
+                <li>stock_final: Int</li>
+                <li>frecuencia: String</li>
             </ul>
         </div>
         <div class="methods">
             <strong>Métodos:</strong>
             <ul>
-                <li>registrarDosis()</li>
-                <li>calcularProximaDosis()</li>
+                <li>obtenerDetallesMedicamento()</li>
+                <li>calcularDuracionStock()</li>
+                <li>guardarSeguimientoEnBD</li>
             </ul>
         </div>
     </div>

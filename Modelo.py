@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+import mysql.connector
+
 class Usuario:
     def __init__(self, nombre, correo, contraseña, rol):
         self.nombre = nombre
@@ -39,9 +42,6 @@ class Usuario:
             file.write(f"{nombre}:{contraseña}:{correo}:{rol}\n")  # Asegurarse de agregar un salto de línea
             print(f"Usuario {nombre} guardado exitosamente.")
         return True
-
-from datetime import datetime
-import mysql.connector
 
 class Medicamento:
     def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0, fechaDeIngreso=None):
@@ -177,9 +177,6 @@ class Medicamento:
             self.fechaDeIngreso = fechaDeIngreso  # Actualizar la fecha de ingreso si se pasa un valor
 
         return self.guardarMedicamentoEnBD()  # Guardar los cambios realizados
-
-import mysql.connector
-from datetime import datetime, timedelta
 
 class Alerta:
     def __init__(self, id=None, tipo="", mensaje="", estado=False):
@@ -318,4 +315,87 @@ class Alerta:
         except mysql.connector.Error as err:
             print(f"Error al eliminar la alerta: {err}")
 
+class SeguimientoMedicamento:
+    def __init__(self, medicamento_id, fecha_ingreso, frecuencia, stock):
+        self.medicamento_id = medicamento_id
+        self.fecha_ingreso = fecha_ingreso
+        self.frecuencia = frecuencia  # frecuencia en horas
+        self.stock = stock
+        self.nombre = ""
+        self.fecha_final = None
+        self.stock_final = None
 
+        self.obtenerDetallesMedicamento()
+
+    def obtenerDetallesMedicamento(self):
+        """ Obtiene los detalles del medicamento de la base de datos """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute("SELECT nombre FROM medicamentos WHERE id = %s", (self.medicamento_id,))
+            medicamento = cursor.fetchone()
+            if medicamento:
+                self.nombre = medicamento['nombre']
+            conexion.close()
+        except mysql.connector.Error as err:
+            print(f"Error al obtener detalles del medicamento: {err}")
+
+    def calcularDuracionStock(self):
+        """ Calcula cuántos días puede durar el medicamento basado en la frecuencia y stock """
+        try:
+            # La frecuencia está en horas, por lo que necesitamos saber cuántas tomas se hacen al día.
+            tomas_por_dia = 24 / self.frecuencia  # Por ejemplo, si la frecuencia es 8, serán 3 tomas al día
+
+            # Duración en días
+            duracion_dias = self.stock / tomas_por_dia
+
+            # Calculamos la fecha final
+            self.fecha_final = self.fecha_ingreso + timedelta(days=duracion_dias)
+
+            # El stock final será 0, ya que hemos calculado que se consume todo el stock
+            self.stock_final = 0
+
+            return self.fecha_final, self.stock_final
+        except Exception as e:
+            print(f"Error al calcular la duración del stock: {e}")
+            return None, None
+
+    def guardarSeguimientoEnBD(self):
+        """ Guarda el seguimiento del medicamento en la base de datos """
+        try:
+            # Calculamos la duración del stock
+            fecha_final, stock_final = self.calcularDuracionStock()
+
+            if fecha_final is None:
+                print("No se pudo calcular la fecha final del seguimiento.")
+                return False
+
+            # Conectamos a la base de datos
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+
+            # Insertamos el seguimiento en la tabla seguimiento_medicamentos
+            cursor.execute(
+                "INSERT INTO seguimiento_medicamentos (medicamento_id, fecha_inicio, fecha_final, stock_final, frecuencia) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (self.medicamento_id, self.fecha_ingreso, fecha_final, stock_final, self.frecuencia)
+            )
+
+            conexion.commit()
+            conexion.close()
+
+            print(f"Seguimiento para {self.nombre} guardado correctamente.")
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error al guardar el seguimiento en la base de datos: {err}")
+            return False
