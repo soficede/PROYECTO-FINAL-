@@ -147,26 +147,8 @@ class Alerta:
         self.mensaje = mensaje
         self.estado = estado
 
-    def generarAlerta(self, medicamento):
-        """Genera una alerta para el medicamento dependiendo de su tipo."""
-        if medicamento.fechaVencimiento <= datetime.now().date():
-            self.tipo = "Vencimiento"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} ha vencido."
-        elif medicamento.fechaVencimiento == datetime.now().date() + timedelta(days=1):
-            self.tipo = "Vencimiento"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} vence mañana."
-        elif medicamento.stock <= 0:
-            self.tipo = "Stock bajo"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} está fuera de stock."
-        else:
-            self.tipo = "Recordatorio"
-            self.mensaje = f"Alerta: Es hora de tomar el medicamento {medicamento.nombre}."
-
-        self.estado = False  # La alerta es inicialmente no leída
-        return self.guardarAlertaEnBD()
-
-    def listarAlertas(self):
-        """Lista todas las alertas almacenadas en la base de datos."""
+    def generarAlerta(self):
+        """Genera alertas basadas en la frecuencia y fecha de vencimiento de los medicamentos"""
         try:
             conexion = mysql.connector.connect(
                 host="localhost",
@@ -175,16 +157,87 @@ class Alerta:
                 database="gestion_medicamentos"
             )
             cursor = conexion.cursor(dictionary=True)
+
+            # Obtener medicamentos
+            cursor.execute("SELECT * FROM medicamentos")
+            medicamentos = cursor.fetchall()
+
+            # Obtener la fecha actual
+            fecha_actual = datetime.now()
+
+            for medicamento in medicamentos:
+                # Verificar vencimiento
+                fecha_vencimiento = medicamento['fecha_vencimiento']
+                
+                if fecha_vencimiento < fecha_actual.date():
+                    # Si el medicamento ya está vencido, crear una alerta de vencimiento
+                    mensaje = f"El medicamento {medicamento['nombre']} ha vencido. Fecha de vencimiento: {fecha_vencimiento}"
+                    self.crearAlerta("Vencimiento", mensaje)
+                    # Si ya está vencido, no verificamos la frecuencia de la toma
+                    continue
+
+                # Verificar frecuencia para la toma del medicamento
+                ultima_toma = medicamento['frecuencia']  # Frecuencia en horas (en la base de datos)
+                frecuencia_toma = timedelta(hours=int(ultima_toma))  # Convertir la frecuencia a un objeto timedelta
+                
+                # Usamos la fecha actual para comprobar si es hora de tomar el medicamento
+                ultima_toma_datetime = datetime.combine(fecha_vencimiento, datetime.min.time())  # Combinamos fecha_vencimiento con hora 00:00:00
+                proxima_toma = ultima_toma_datetime + frecuencia_toma
+
+                if proxima_toma <= fecha_actual:
+                    # Crear alerta para tomar medicamento
+                    mensaje = f"Es hora de tomar el medicamento {medicamento['nombre']}. Última toma: {ultima_toma_datetime}, próxima toma: {proxima_toma}"
+                    self.crearAlerta("Tomar Medicamento", mensaje)
+
+            conexion.close()
+        except mysql.connector.Error as err:
+            print(f"Error al generar alerta: {err}")
+
+    def crearAlerta(self, tipo, mensaje):
+        """Crea una alerta en la base de datos"""
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+
+            # Insertar alerta en la tabla alertas
+            cursor.execute(
+                "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
+                (tipo, mensaje, False)
+            )
+            conexion.commit()
+            conexion.close()
+            print(f"Alerta generada: {mensaje}")
+        except mysql.connector.Error as err:
+            print(f"Error al crear alerta: {err}")
+
+    def listarAlertas(self):
+        """Lista todas las alertas en la base de datos"""
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor(dictionary=True)
+
+            # Obtener todas las alertas
             cursor.execute("SELECT * FROM alertas")
             alertas = cursor.fetchall()
             conexion.close()
-            return alertas
-        except mysql.connector.Error as err:
-            print(f"Error al conectar con la base de datos: {err}")
-            return []
 
-    def marcarComoLeida(self):
-        """Marca la alerta como leída en la base de datos."""
+            for alerta in alertas:
+                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {'Leída' if alerta['estado'] else 'No Leída'}")
+        except mysql.connector.Error as err:
+            print(f"Error al listar alertas: {err}")
+
+    def marcarComoLeida(self, alerta_id):
+        """Marca una alerta como leída en la base de datos"""
         try:
             conexion = mysql.connector.connect(
                 host="localhost",
@@ -193,38 +246,14 @@ class Alerta:
                 database="gestion_medicamentos"
             )
             cursor = conexion.cursor()
+
+            # Actualizar el estado de la alerta a leída
             cursor.execute(
-                "UPDATE alertas SET estado=%s WHERE id=%s",
-                (True, self.id)
+                "UPDATE alertas SET estado = TRUE WHERE id = %s", (alerta_id,)
             )
             conexion.commit()
             conexion.close()
-            print(f"Alerta {self.id} marcada como leída.")
-            return True
+            print(f"Alerta {alerta_id} marcada como leída.")
         except mysql.connector.Error as err:
             print(f"Error al marcar la alerta como leída: {err}")
-            return False
-
-    def guardarAlertaEnBD(self):
-        """Guarda la alerta en la base de datos."""
-        try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="admin_farmacia",
-                password="contraseña_segura_123",
-                database="gestion_medicamentos"
-            )
-            cursor = conexion.cursor()
-
-            cursor.execute(
-                "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
-                (self.tipo, self.mensaje, self.estado)
-            )
-            conexion.commit()
-            conexion.close()
-            print(f"Alerta de tipo '{self.tipo}' guardada correctamente en la base de datos.")
-            return True
-        except mysql.connector.Error as err:
-            print(f"Error al guardar la alerta en la base de datos: {err}")
-            return False
 

@@ -93,93 +93,22 @@ from Modelo import Usuario
 # # Ejecutar la prueba
 # prueba_medicamento()
 
-import mysql.connector
-from datetime import datetime, timedelta
+from Modelo import Alerta
 
-class Alerta:
-    def __init__(self, id=None, tipo="", mensaje="", estado=False):
-        self.id = id
-        self.tipo = tipo
-        self.mensaje = mensaje
-        self.estado = estado
+def prueba_alerta():
+    # Crear objeto Alerta
+    alerta = Alerta()
 
-    def generarAlerta(self, medicamento):
-        """Genera una alerta para el medicamento dependiendo de su tipo."""
-        if medicamento.fechaVencimiento <= datetime.now().date():
-            self.tipo = "Vencimiento"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} ha vencido."
-        elif medicamento.fechaVencimiento == datetime.now().date() + timedelta(days=1):
-            self.tipo = "Vencimiento"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} vence mañana."
-        elif medicamento.stock <= 0:
-            self.tipo = "Stock bajo"
-            self.mensaje = f"Alerta: El medicamento {medicamento.nombre} está fuera de stock."
-        else:
-            self.tipo = "Recordatorio"
-            self.mensaje = f"Alerta: Es hora de tomar el medicamento {medicamento.nombre}."
+    # Generar alertas basadas en la frecuencia y fecha de vencimiento
+    alerta.generarAlerta()
 
-        self.estado = False  # La alerta es inicialmente no leída
-        return self.guardarAlertaEnBD()
+    # Listar todas las alertas generadas
+    alerta.listarAlertas()
 
-    def listarAlertas(self):
-        """Lista todas las alertas almacenadas en la base de datos."""
-        try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="admin_farmacia",
-                password="contraseña_segura_123",
-                database="gestion_medicamentos"
-            )
-            cursor = conexion.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM alertas")
-            alertas = cursor.fetchall()
-            conexion.close()
-            return alertas
-        except mysql.connector.Error as err:
-            print(f"Error al conectar con la base de datos: {err}")
-            return []
+    # Marcar una alerta como leída
+    alerta_id = int(input("Introduce el ID de la alerta que quieres marcar como leída: "))
+    alerta.marcarComoLeida(alerta_id)
 
-    def marcarComoLeida(self):
-        """Marca la alerta como leída en la base de datos."""
-        try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="admin_farmacia",
-                password="contraseña_segura_123",
-                database="gestion_medicamentos"
-            )
-            cursor = conexion.cursor()
-            cursor.execute(
-                "UPDATE alertas SET estado=%s WHERE id=%s",
-                (True, self.id)
-            )
-            conexion.commit()
-            conexion.close()
-            print(f"Alerta {self.id} marcada como leída.")
-            return True
-        except mysql.connector.Error as err:
-            print(f"Error al marcar la alerta como leída: {err}")
-            return False
+# Ejecutar la prueba
+prueba_alerta()
 
-    def guardarAlertaEnBD(self):
-        """Guarda la alerta en la base de datos."""
-        try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="admin_farmacia",
-                password="contraseña_segura_123",
-                database="gestion_medicamentos"
-            )
-            cursor = conexion.cursor()
-
-            cursor.execute(
-                "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
-                (self.tipo, self.mensaje, self.estado)
-            )
-            conexion.commit()
-            conexion.close()
-            print(f"Alerta de tipo '{self.tipo}' guardada correctamente en la base de datos.")
-            return True
-        except mysql.connector.Error as err:
-            print(f"Error al guardar la alerta en la base de datos: {err}")
-            return False
