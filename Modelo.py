@@ -44,13 +44,14 @@ from datetime import datetime
 import mysql.connector
 
 class Medicamento:
-    def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0):
+    def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0, fechaDeIngreso=None):
         self.id = id
         self.nombre = nombre
         self.dosis = dosis
         self.frecuencia = frecuencia
         self.fechaVencimiento = fechaVencimiento
         self.stock = stock
+        self.fechaDeIngreso = fechaDeIngreso if fechaDeIngreso else datetime.now().date()  # Asignar la fecha de ingreso si no se pasa
 
     def actualizarStock(self, cantidad):
         """ Actualiza el stock del medicamento """
@@ -119,20 +120,20 @@ class Medicamento:
                 database="gestion_medicamentos"
             )
             cursor = conexion.cursor()
-            
+
             if self.id is None:  # Si el medicamento no tiene ID, es un nuevo medicamento
                 cursor.execute(
-                    "INSERT INTO medicamentos (nombre, dosis, frecuencia, fecha_vencimiento, stock) "
-                    "VALUES (%s, %s, %s, %s, %s)",
-                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock)
+                    "INSERT INTO medicamentos (nombre, dosis, frecuencia, fecha_vencimiento, stock, fecha_ingreso) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.fechaDeIngreso)
                 )
             else:  # Si ya tiene ID, lo actualizamos
                 cursor.execute(
-                    "UPDATE medicamentos SET nombre=%s, dosis=%s, frecuencia=%s, fecha_vencimiento=%s, stock=%s "
+                    "UPDATE medicamentos SET nombre=%s, dosis=%s, frecuencia=%s, fecha_vencimiento=%s, stock=%s, fecha_ingreso=%s "
                     "WHERE id=%s",
-                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.id)
+                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.fechaDeIngreso, self.id)
                 )
-            
+
             conexion.commit()
             conexion.close()
             print(f"Medicamento {self.nombre} guardado correctamente en la base de datos.")
@@ -160,7 +161,7 @@ class Medicamento:
             print(f"Error al eliminar el medicamento: {err}")
             return False
 
-    def modificarMedicamento(self, nombre=None, dosis=None, frecuencia=None, fechaVencimiento=None, stock=None):
+    def modificarMedicamento(self, nombre=None, dosis=None, frecuencia=None, fechaVencimiento=None, stock=None, fechaDeIngreso=None):
         """ Modifica un medicamento existente en la base de datos """
         if nombre:
             self.nombre = nombre
@@ -172,6 +173,8 @@ class Medicamento:
             self.fechaVencimiento = fechaVencimiento
         if stock is not None:
             self.stock = stock
+        if fechaDeIngreso:
+            self.fechaDeIngreso = fechaDeIngreso  # Actualizar la fecha de ingreso si se pasa un valor
 
         return self.guardarMedicamentoEnBD()  # Guardar los cambios realizados
 
