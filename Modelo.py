@@ -40,8 +40,8 @@ class Usuario:
             print(f"Usuario {nombre} guardado exitosamente.")
         return True
 
-import mysql.connector
 from datetime import datetime
+import mysql.connector
 
 class Medicamento:
     def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0):
@@ -58,7 +58,11 @@ class Medicamento:
             print("No hay suficiente stock para reducir esa cantidad.")
             return False
         self.stock += cantidad
-        return self.guardarMedicamentoEnBD()  # Guardar el medicamento con el stock actualizado
+        if self.stock <= 0:
+            self.eliminarMedicamento()  # Si el stock es 0 o negativo, eliminar el medicamento
+        else:
+            return self.guardarMedicamentoEnBD()  # Guardar el medicamento con el stock actualizado
+        return True
 
     def verificarVencimiento(self):
         """ Verifica si el medicamento está vencido """
@@ -136,6 +140,40 @@ class Medicamento:
         except mysql.connector.Error as err:
             print(f"Error al guardar el medicamento: {err}")
             return False
+
+    def eliminarMedicamento(self):
+        """ Elimina un medicamento de la base de datos """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+            cursor.execute("DELETE FROM medicamentos WHERE id = %s", (self.id,))
+            conexion.commit()
+            conexion.close()
+            print(f"Medicamento {self.nombre} eliminado de la base de datos debido a stock cero.")
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error al eliminar el medicamento: {err}")
+            return False
+
+    def modificarMedicamento(self, nombre=None, dosis=None, frecuencia=None, fechaVencimiento=None, stock=None):
+        """ Modifica un medicamento existente en la base de datos """
+        if nombre:
+            self.nombre = nombre
+        if dosis:
+            self.dosis = dosis
+        if frecuencia:
+            self.frecuencia = frecuencia
+        if fechaVencimiento:
+            self.fechaVencimiento = fechaVencimiento
+        if stock is not None:
+            self.stock = stock
+
+        return self.guardarMedicamentoEnBD()  # Guardar los cambios realizados
 
 import mysql.connector
 from datetime import datetime, timedelta
@@ -232,7 +270,8 @@ class Alerta:
             conexion.close()
 
             for alerta in alertas:
-                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {'Leída' if alerta['estado'] else 'No Leída'}")
+                estado = "Leída" if alerta['estado'] else "No Leída"
+                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {estado}")
         except mysql.connector.Error as err:
             print(f"Error al listar alertas: {err}")
 
@@ -256,4 +295,24 @@ class Alerta:
             print(f"Alerta {alerta_id} marcada como leída.")
         except mysql.connector.Error as err:
             print(f"Error al marcar la alerta como leída: {err}")
+
+    def eliminarAlerta(self, alerta_id):
+        """Elimina una alerta de la base de datos"""
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+
+            # Eliminar la alerta de la base de datos
+            cursor.execute("DELETE FROM alertas WHERE id = %s", (alerta_id,))
+            conexion.commit()
+            conexion.close()
+            print(f"Alerta {alerta_id} eliminada de la base de datos.")
+        except mysql.connector.Error as err:
+            print(f"Error al eliminar la alerta: {err}")
+
 
