@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+import mysql.connector
+
 class Usuario:
     def __init__(self, nombre, correo, contraseña, rol):
         self.nombre = nombre
@@ -40,17 +43,15 @@ class Usuario:
             print(f"Usuario {nombre} guardado exitosamente.")
         return True
 
-import mysql.connector
-from datetime import datetime
-
 class Medicamento:
-    def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0):
+    def __init__(self, id=None, nombre="", dosis="", frecuencia="", fechaVencimiento=None, stock=0, fechaDeIngreso=None):
         self.id = id
         self.nombre = nombre
         self.dosis = dosis
         self.frecuencia = frecuencia
         self.fechaVencimiento = fechaVencimiento
         self.stock = stock
+        self.fechaDeIngreso = fechaDeIngreso if fechaDeIngreso else datetime.now().date()  # Asignar la fecha de ingreso si no se pasa
 
     def actualizarStock(self, cantidad):
         """ Actualiza el stock del medicamento """
@@ -58,7 +59,11 @@ class Medicamento:
             print("No hay suficiente stock para reducir esa cantidad.")
             return False
         self.stock += cantidad
-        return self.guardarMedicamentoEnBD()  # Guardar el medicamento con el stock actualizado
+        if self.stock <= 0:
+            self.eliminarMedicamento()  # Si el stock es 0 o negativo, eliminar el medicamento
+        else:
+            return self.guardarMedicamentoEnBD()  # Guardar el medicamento con el stock actualizado
+        return True
 
     def verificarVencimiento(self):
         """ Verifica si el medicamento está vencido """
@@ -115,20 +120,20 @@ class Medicamento:
                 database="gestion_medicamentos"
             )
             cursor = conexion.cursor()
-            
+
             if self.id is None:  # Si el medicamento no tiene ID, es un nuevo medicamento
                 cursor.execute(
-                    "INSERT INTO medicamentos (nombre, dosis, frecuencia, fecha_vencimiento, stock) "
-                    "VALUES (%s, %s, %s, %s, %s)",
-                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock)
+                    "INSERT INTO medicamentos (nombre, dosis, frecuencia, fecha_vencimiento, stock, fecha_ingreso) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.fechaDeIngreso)
                 )
             else:  # Si ya tiene ID, lo actualizamos
                 cursor.execute(
-                    "UPDATE medicamentos SET nombre=%s, dosis=%s, frecuencia=%s, fecha_vencimiento=%s, stock=%s "
+                    "UPDATE medicamentos SET nombre=%s, dosis=%s, frecuencia=%s, fecha_vencimiento=%s, stock=%s, fecha_ingreso=%s "
                     "WHERE id=%s",
-                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.id)
+                    (self.nombre, self.dosis, self.frecuencia, self.fechaVencimiento, self.stock, self.fechaDeIngreso, self.id)
                 )
-            
+
             conexion.commit()
             conexion.close()
             print(f"Medicamento {self.nombre} guardado correctamente en la base de datos.")
@@ -137,8 +142,41 @@ class Medicamento:
             print(f"Error al guardar el medicamento: {err}")
             return False
 
-import mysql.connector
-from datetime import datetime, timedelta
+    def eliminarMedicamento(self):
+        """ Elimina un medicamento de la base de datos """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+            cursor.execute("DELETE FROM medicamentos WHERE id = %s", (self.id,))
+            conexion.commit()
+            conexion.close()
+            print(f"Medicamento {self.nombre} eliminado de la base de datos debido a stock cero.")
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error al eliminar el medicamento: {err}")
+            return False
+
+    def modificarMedicamento(self, nombre=None, dosis=None, frecuencia=None, fechaVencimiento=None, stock=None, fechaDeIngreso=None):
+        """ Modifica un medicamento existente en la base de datos """
+        if nombre:
+            self.nombre = nombre
+        if dosis:
+            self.dosis = dosis
+        if frecuencia:
+            self.frecuencia = frecuencia
+        if fechaVencimiento:
+            self.fechaVencimiento = fechaVencimiento
+        if stock is not None:
+            self.stock = stock
+        if fechaDeIngreso:
+            self.fechaDeIngreso = fechaDeIngreso  # Actualizar la fecha de ingreso si se pasa un valor
+
+        return self.guardarMedicamentoEnBD()  # Guardar los cambios realizados
 
 class Alerta:
     def __init__(self, id=None, tipo="", mensaje="", estado=False):
@@ -232,7 +270,8 @@ class Alerta:
             conexion.close()
 
             for alerta in alertas:
-                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {'Leída' if alerta['estado'] else 'No Leída'}")
+                estado = "Leída" if alerta['estado'] else "No Leída"
+                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {estado}")
         except mysql.connector.Error as err:
             print(f"Error al listar alertas: {err}")
 
@@ -257,3 +296,157 @@ class Alerta:
         except mysql.connector.Error as err:
             print(f"Error al marcar la alerta como leída: {err}")
 
+    def eliminarAlerta(self, alerta_id):
+        """Elimina una alerta de la base de datos"""
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+
+            # Eliminar la alerta de la base de datos
+            cursor.execute("DELETE FROM alertas WHERE id = %s", (alerta_id,))
+            conexion.commit()
+            conexion.close()
+            print(f"Alerta {alerta_id} eliminada de la base de datos.")
+        except mysql.connector.Error as err:
+            print(f"Error al eliminar la alerta: {err}")
+
+from datetime import datetime, timedelta
+import mysql.connector
+
+class SeguimientoMedicamento:
+    def __init__(self, medicamento_id, fecha_ingreso, frecuencia, stock):
+        self.medicamento_id = medicamento_id
+        self.fecha_ingreso = fecha_ingreso
+        self.frecuencia = frecuencia  # frecuencia en horas
+        self.stock = stock
+        self.nombre = ""
+        self.fecha_final = None
+        self.stock_final = None
+
+        self.obtenerDetallesMedicamento()
+
+    def obtenerDetallesMedicamento(self):
+        """ Obtiene los detalles del medicamento de la base de datos """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute("SELECT nombre FROM medicamentos WHERE id = %s", (self.medicamento_id,))
+            medicamento = cursor.fetchone()
+            if medicamento:
+                self.nombre = medicamento['nombre']
+            conexion.close()
+        except mysql.connector.Error as err:
+            print(f"Error al obtener detalles del medicamento: {err}")
+
+    def calcularDuracionStock(self):
+        """ Calcula cuántos días puede durar el medicamento basado en la frecuencia y stock """
+        try:
+            # La frecuencia está en horas, por lo que necesitamos saber cuántas tomas se hacen al día.
+            tomas_por_dia = 24 / self.frecuencia  # Por ejemplo, si la frecuencia es 8, serán 3 tomas al día
+
+            # Duración en días
+            duracion_dias = self.stock / tomas_por_dia
+
+            # Calculamos la fecha final
+            self.fecha_final = self.fecha_ingreso + timedelta(days=duracion_dias)
+
+            # El stock final será 0, ya que hemos calculado que se consume todo el stock
+            self.stock_final = 0
+
+            return self.fecha_final, self.stock_final
+        except Exception as e:
+            print(f"Error al calcular la duración del stock: {e}")
+            return None, None
+
+    def guardarSeguimientoEnBD(self):
+        """ Guarda el seguimiento del medicamento en la base de datos """
+        try:
+            # Calculamos la duración del stock
+            fecha_final, stock_final = self.calcularDuracionStock()
+
+            if fecha_final is None:
+                print("No se pudo calcular la fecha final del seguimiento.")
+                return False
+
+            # Conectamos a la base de datos
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor()
+
+            # Insertamos el seguimiento en la tabla seguimiento_medicamentos
+            cursor.execute(
+                "INSERT INTO seguimiento_medicamentos (medicamento_id, fecha_inicio, fecha_final, stock_final, frecuencia) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (self.medicamento_id, self.fecha_ingreso, fecha_final, stock_final, self.frecuencia)
+            )
+
+            conexion.commit()
+            conexion.close()
+
+            print(f"Seguimiento para {self.nombre} guardado correctamente.")
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error al guardar el seguimiento en la base de datos: {err}")
+            return False
+
+    def verSeguimientos(self, medicamento_id=None):
+        """
+        Busca y lista los seguimientos de medicamentos en la base de datos.
+        Si se pasa un medicamento_id, devuelve solo los seguimientos de ese medicamento.
+        Si no, devuelve todos los seguimientos.
+        """
+        try:
+            conexion = mysql.connector.connect(
+                host="localhost",
+                user="admin_farmacia",
+                password="contraseña_segura_123",
+                database="gestion_medicamentos"
+            )
+            cursor = conexion.cursor(dictionary=True)
+
+            if medicamento_id:
+                # Buscar seguimientos de un medicamento específico
+                cursor.execute(
+                    "SELECT sm.*, m.nombre FROM seguimiento_medicamentos sm "
+                    "JOIN medicamentos m ON sm.medicamento_id = m.id "
+                    "WHERE sm.medicamento_id = %s", (medicamento_id,)
+                )
+            else:
+                # Buscar todos los seguimientos
+                cursor.execute(
+                    "SELECT sm.*, m.nombre FROM seguimiento_medicamentos sm "
+                    "JOIN medicamentos m ON sm.medicamento_id = m.id"
+                )
+
+            seguimientos = cursor.fetchall()
+            conexion.close()
+
+            # Mostrar seguimientos
+            if not seguimientos:
+                print("No se encontraron seguimientos.")
+                return
+
+            for seguimiento in seguimientos:
+                print(f"ID Seguimiento: {seguimiento['id']}")
+                print(f"Medicamento: {seguimiento['nombre']} (ID: {seguimiento['medicamento_id']})")
+                print(f"Fecha de Inicio: {seguimiento['fecha_inicio']}")
+                print(f"Fecha Final: {seguimiento['fecha_final']}")
+                print(f"Stock Final: {seguimiento['stock_final']}")
+                print(f"Frecuencia: Cada {seguimiento['frecuencia']} horas")
+                print("-" * 40)
+        except mysql.connector.Error as err:
+            print(f"Error al buscar seguimientos: {err}")

@@ -117,6 +117,7 @@
                 <li>frecuencia: String</li>
                 <li>fechaVencimiento: Date</li>
                 <li>stock: int</li>
+                <li>fechaDeIngreso: Date</li>
             </ul>
         </div>
         <div class="methods">
@@ -125,8 +126,10 @@
                 <li>actualizarStock()</li>
                 <li>verificarVencimiento()</li>
                 <li>cargarMedicamentosDesdeBD()</li>
-                </li>buscarMedicamentoPorID (medicamento_id)</li>
+                <li>buscarMedicamentoPorID (medicamento_id)</li>
                 <li>guardarMedicamentoEnBD()</li>
+                <li>eliminarMedicamento()</li>
+                <li>modificarMedicamento(nombre, dosis, frecuencia, fechaVencimiento, stock ,fechaDeIngreso)</li>
             </ul>
         </div>
     </div>
@@ -146,29 +149,33 @@
             <strong>Métodos:</strong>
             <ul>
                 <li>generarAlerta()</li>
+                <li>crearAlerta</li>
                 <li>listarAlertas()</li>
                 <li>marcarComoLeida()</li>
+                <li>eliminarAlerta()</li>
             </ul>
         </div>
     </div>
 
     <div class="class-box">
-        <h3>Seguimiento</h3>
+        <h3>SeguimientoMedicamento</h3>
         <div class="attributes">
             <strong>Atributos:</strong>
             <ul>
-                <li>id: int</li>
-                <li>usuario: Usuario</li>
-                <li>medicamento: Medicamento</li>
-                <li>horaUltimaDosis: DateTime</li>
-                <li>proximaDosis: DateTime</li>
+                <li>medicamento_id: int</li>
+                <li>fecha_inicio: Date</li>
+                <li>fecha_final: Date </li>
+                <li>stock_final: Int</li>
+                <li>frecuencia: String</li>
             </ul>
         </div>
         <div class="methods">
             <strong>Métodos:</strong>
             <ul>
-                <li>registrarDosis()</li>
-                <li>calcularProximaDosis()</li>
+                <li>obtenerDetallesMedicamento()</li>
+                <li>calcularDuracionStock()</li>
+                <li>guardarSeguimientoEnBD()</li>
+                <li>verSeguimientos(medicamento_id=None)</li>
             </ul>
         </div>
     </div>
