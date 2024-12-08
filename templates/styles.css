@@ -1,0 +1,172 @@
+/*INICIO*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #37586b;
+    color: white;
+}
+
+.container {
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    width: 210px;
+    height: auto;
+    margin: 20px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn.ingresar {
+    background-color: #2a3d32;
+    color: white;
+}
+
+.btn.registrarse {
+    background-color: #e76f62;
+    color: white;
+}
+
+.main {
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.main h1 {
+    font-size: 40px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.features {
+    list-style: none;
+    text-align: left;
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    padding: 0;
+}
+
+.features li {
+    display: flex;
+    align-items: left;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.features li img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.pastas {
+    width: 110px;
+    height: auto;
+    position: absolute;
+    top: 200px;
+    right: 50px;
+}
+
+.footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2a3d32;
+    padding: 1px;
+    border-radius: 0px;
+}
+
+.footer-img {
+    width: 60%;
+    height: auto;
+    margin-left: 0px;
+}
+
+.ver-mas {
+    padding: 30px 20px;
+    background-color: #2a3d32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 35px;
+    cursor: pointer;
+    margin-right: 160px;
+}
+
+/* VER MAS */
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #37586b;
+}
+
+.info-box {
+    background-color: white;
+    color: #2a3d32;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.info-box h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.info-box p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.info-box .highlight {
+    font-weight: bold;
+    color: #2a3d32;
+    margin-bottom: 20px;
+}
+
+.manual-btn {
+    padding: 10px 20px;
+    background-color: #e76f62;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
