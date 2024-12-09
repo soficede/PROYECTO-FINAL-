@@ -186,8 +186,9 @@ class Alerta:
         self.mensaje = mensaje
         self.estado = estado
 
-    def generarAlerta(self):
-        """Genera alertas basadas en la frecuencia y fecha de vencimiento de los medicamentos"""
+    def generarYCrearAlerta(self):
+        """Genera alertas basadas en la frecuencia y fecha de vencimiento de los medicamentos, 
+        evitando la creación de alertas duplicadas, todo en un solo método."""
         try:
             conexion = mysql.connector.connect(
                 host="localhost",
@@ -207,18 +208,30 @@ class Alerta:
             for medicamento in medicamentos:
                 # Verificar vencimiento
                 fecha_vencimiento = medicamento['fecha_vencimiento']
-                
+
                 if fecha_vencimiento < fecha_actual.date():
                     # Si el medicamento ya está vencido, crear una alerta de vencimiento
                     mensaje = f"El medicamento {medicamento['nombre']} ha vencido. Fecha de vencimiento: {fecha_vencimiento}"
-                    self.crearAlerta("Vencimiento", mensaje)
+                    # Verificar si la alerta ya existe antes de crearla
+                    cursor.execute(
+                        "SELECT * FROM alertas WHERE tipo = %s AND mensaje = %s",
+                        ("Vencimiento", mensaje)
+                    )
+                    alerta_existente = cursor.fetchone()
+                    if not alerta_existente:  # Si no existe, crearla
+                        cursor.execute(
+                            "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
+                            ("Vencimiento", mensaje, False)
+                        )
+                        conexion.commit()
+                        print(f"Alerta de vencimiento generada: {mensaje}")
                     # Si ya está vencido, no verificamos la frecuencia de la toma
                     continue
 
                 # Verificar frecuencia para la toma del medicamento
                 ultima_toma = medicamento['frecuencia']  # Frecuencia en horas (en la base de datos)
                 frecuencia_toma = timedelta(hours=int(ultima_toma))  # Convertir la frecuencia a un objeto timedelta
-                
+
                 # Usamos la fecha actual para comprobar si es hora de tomar el medicamento
                 ultima_toma_datetime = datetime.combine(fecha_vencimiento, datetime.min.time())  # Combinamos fecha_vencimiento con hora 00:00:00
                 proxima_toma = ultima_toma_datetime + frecuencia_toma
@@ -226,33 +239,23 @@ class Alerta:
                 if proxima_toma <= fecha_actual:
                     # Crear alerta para tomar medicamento
                     mensaje = f"Es hora de tomar el medicamento {medicamento['nombre']}. Última toma: {ultima_toma_datetime}, próxima toma: {proxima_toma}"
-                    self.crearAlerta("Tomar Medicamento", mensaje)
+                    # Verificar si la alerta ya existe antes de crearla
+                    cursor.execute(
+                        "SELECT * FROM alertas WHERE tipo = %s AND mensaje = %s",
+                        ("Tomar Medicamento", mensaje)
+                    )
+                    alerta_existente = cursor.fetchone()
+                    if not alerta_existente:  # Si no existe, crearla
+                        cursor.execute(
+                            "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
+                            ("Tomar Medicamento", mensaje, False)
+                        )
+                        conexion.commit()
+                        print(f"Alerta de tomar medicamento generada: {mensaje}")
 
             conexion.close()
         except mysql.connector.Error as err:
-            print(f"Error al generar alerta: {err}")
-
-    def crearAlerta(self, tipo, mensaje):
-        """Crea una alerta en la base de datos"""
-        try:
-            conexion = mysql.connector.connect(
-                host="localhost",
-                user="admin_farmacia",
-                password="contraseña_segura_123",
-                database="gestion_medicamentos"
-            )
-            cursor = conexion.cursor()
-
-            # Insertar alerta en la tabla alertas
-            cursor.execute(
-                "INSERT INTO alertas (tipo, mensaje, estado) VALUES (%s, %s, %s)",
-                (tipo, mensaje, False)
-            )
-            conexion.commit()
-            conexion.close()
-            print(f"Alerta generada: {mensaje}")
-        except mysql.connector.Error as err:
-            print(f"Error al crear alerta: {err}")
+            print(f"Error al generar y crear alerta: {err}")
 
     def listarAlertas(self):
         """Lista todas las alertas en la base de datos"""
@@ -315,9 +318,6 @@ class Alerta:
             print(f"Alerta {alerta_id} eliminada de la base de datos.")
         except mysql.connector.Error as err:
             print(f"Error al eliminar la alerta: {err}")
-
-from datetime import datetime, timedelta
-import mysql.connector
 
 class SeguimientoMedicamento:
     def __init__(self, medicamento_id, fecha_ingreso, frecuencia, stock):

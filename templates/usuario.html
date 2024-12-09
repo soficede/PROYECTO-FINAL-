@@ -7,8 +7,25 @@
 </head>
 <body>
     <h1>Bienvenido a la Gestión de Medicamentos</h1>
-    
-    <!-- Botón para regresar al índice -->
+
+    <!-- Mostrar alertas -->
+    <h2>Alertas Activas</h2>
+    {% if alertas %}
+        <ul>
+            {% for alerta in alertas %}
+                <li>
+                    <strong>{{ alerta.tipo }}</strong>: {{ alerta.mensaje }}
+                    {% if alerta.estado == False %}
+                        <a href="{{ url_for('marcar_alerta_leida', alerta_id=alerta.id) }}">Marcar como Leída</a>
+                    {% endif %}
+                    <a href="{{ url_for('eliminar_alerta', alerta_id=alerta.id) }}">Eliminar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay alertas activas.</p>
+    {% endif %}
+
     <a href="{{ url_for('index') }}">
         <button>Volver al Inicio</button>
     </a>

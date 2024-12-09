@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from Controlador import ControladorUsuario, ControladorMedicamento
+from Modelo import Alerta  # Importar la clase Alerta
 
 app = Flask(__name__)
 app.secret_key = "secret_key"  # Para usar mensajes flash
@@ -10,7 +11,13 @@ controlador_medicamento = ControladorMedicamento()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Crear alertas si es necesario
+    alerta_obj = Alerta()
+    alerta_obj.generarYCrearAlerta()  # Genera las alertas pertinentes al ingresar
+
+    # Obtener las alertas generadas
+    alertas = alerta_obj.listarAlertas()
+    return render_template('index.html', alertas=alertas)  # Pasar las alertas a la plantilla
 
 @app.route('/ingresar')
 def ingresar():
@@ -47,7 +54,12 @@ def guardar():
 @app.route('/usuario')
 def usuario():
     medicamentos = controlador_medicamento.obtener_medicamentos()
-    return render_template('usuario.html', medicamentos=medicamentos)
+
+    # Mostrar las alertas activas en la vista de usuario
+    alerta_obj = Alerta()
+    alertas = alerta_obj.listarAlertas()  # Obtener las alertas
+
+    return render_template('usuario.html', medicamentos=medicamentos, alertas=alertas)
 
 @app.route('/agregar_medicamento', methods=['POST'])
 def agregar_medicamento():
@@ -87,6 +99,19 @@ def editar_medicamento(id):
             flash('Error al editar el medicamento', 'error')
             return redirect(url_for('usuario'))
     return render_template('editar_medicamento.html', medicamento=medicamento)
+
+# Rutas para manejar la alerta
+@app.route('/marcar_alerta_leida/<int:alerta_id>')
+def marcar_alerta_leida(alerta_id):
+    alerta_obj = Alerta()
+    alerta_obj.marcarComoLeida(alerta_id)  # Marca la alerta como leída
+    return redirect(url_for('usuario'))  # Redirige a la vista de usuario
+
+@app.route('/eliminar_alerta/<int:alerta_id>')
+def eliminar_alerta(alerta_id):
+    alerta_obj = Alerta()
+    alerta_obj.eliminarAlerta(alerta_id)  # Elimina la alerta
+    return redirect(url_for('usuario'))  # Redirige a la vista de usuario
 
 if __name__ == '__main__':
     app.run(debug=True)
