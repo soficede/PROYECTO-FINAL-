@@ -8,6 +8,11 @@
 <body>
     <h1>Bienvenido a la Gestión de Medicamentos</h1>
     
+    <!-- Botón para regresar al índice -->
+    <a href="{{ url_for('index') }}">
+        <button>Volver al Inicio</button>
+    </a>
+
     <!-- Formulario para agregar un medicamento -->
     <form action="/agregar_medicamento" method="POST">
         <h2>Agregar Medicamento</h2>
