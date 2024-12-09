@@ -1,0 +1,22 @@
+<h2>Seguimientos de Medicamentos</h2>
+{% if seguimientos %}
+    <ul>
+        {% for seguimiento in seguimientos %}
+            <li>
+                <strong>{{ seguimiento['nombre'] }}</strong> (ID: {{ seguimiento['medicamento_id'] }})
+                <br>
+                Fecha de inicio: {{ seguimiento['fecha_inicio'] }}
+                <br>
+                Fecha final: {{ seguimiento['fecha_final'] }}
+                <br>
+                Stock final: {{ seguimiento['stock_final'] }}
+                <br>
+                Frecuencia: Cada {{ seguimiento['frecuencia'] }} horas
+                <br>
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay seguimientos disponibles.</p>
+{% endif %}

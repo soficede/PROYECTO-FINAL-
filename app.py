@@ -1,23 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from Controlador import ControladorUsuario, ControladorMedicamento
-from Modelo import Alerta  # Importar la clase Alerta
+from Controlador import ControladorUsuario, ControladorMedicamento, ControladorSeguimiento  # Importar ControladorSeguimiento
+from Modelo import Alerta
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "secret_key"  # Para usar mensajes flash
 
-# Instancia del controlador
+# Instancia de los controladores
 controlador_usuario = ControladorUsuario()
 controlador_medicamento = ControladorMedicamento()
+controlador_seguimiento = ControladorSeguimiento()  # Instancia del controlador de seguimiento
 
 @app.route('/')
 def index():
-    # Crear alertas si es necesario
     alerta_obj = Alerta()
     alerta_obj.generarYCrearAlerta()  # Genera las alertas pertinentes al ingresar
-
-    # Obtener las alertas generadas
     alertas = alerta_obj.listarAlertas()
-    return render_template('index.html', alertas=alertas)  # Pasar las alertas a la plantilla
+    return render_template('index.html', alertas=alertas)
 
 @app.route('/ingresar')
 def ingresar():
@@ -54,12 +53,10 @@ def guardar():
 @app.route('/usuario')
 def usuario():
     medicamentos = controlador_medicamento.obtener_medicamentos()
-
-    # Mostrar las alertas activas en la vista de usuario
     alerta_obj = Alerta()
     alertas = alerta_obj.listarAlertas()  # Obtener las alertas
-
-    return render_template('usuario.html', medicamentos=medicamentos, alertas=alertas)
+    seguimientos = controlador_seguimiento.obtener_seguimientos()
+    return render_template('usuario.html', medicamentos=medicamentos, alertas=alertas, seguimientos=seguimientos)
 
 @app.route('/agregar_medicamento', methods=['POST'])
 def agregar_medicamento():
@@ -99,6 +96,29 @@ def editar_medicamento(id):
             flash('Error al editar el medicamento', 'error')
             return redirect(url_for('usuario'))
     return render_template('editar_medicamento.html', medicamento=medicamento)
+
+# Nuevas rutas para gestionar el seguimiento de medicamentos
+@app.route('/agregar_seguimiento', methods=['POST'])
+def agregar_seguimiento():
+    medicamento_id = request.form['medicamento_id']
+    fecha_ingreso = datetime.strptime(request.form['fecha_ingreso'], '%Y-%m-%d')
+    frecuencia = int(request.form['frecuencia'])
+    stock = int(request.form['stock'])
+
+    if controlador_seguimiento.crear_seguimiento(medicamento_id, fecha_ingreso, frecuencia, stock):
+        flash('Seguimiento agregado correctamente', 'success')
+        return redirect(url_for('usuario'))
+    else:
+        flash('Error al agregar el seguimiento', 'error')
+        return redirect(url_for('usuario'))
+
+@app.route('/seguimientos')
+def seguimientos():
+    # Obtenemos todos los seguimientos o de un medicamento específico
+    medicamento_id = request.args.get('medicamento_id', None)
+    seguimientos = controlador_seguimiento.obtener_seguimientos(medicamento_id)
+    
+    return render_template('seguimientos.html', seguimientos=seguimientos)
 
 # Rutas para manejar la alerta
 @app.route('/marcar_alerta_leida/<int:alerta_id>')

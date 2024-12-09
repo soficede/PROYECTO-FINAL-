@@ -8,7 +8,7 @@
 <body>
     <h1>Bienvenido a la Gestión de Medicamentos</h1>
 
-    <!-- Mostrar alertas -->
+   <!-- Mostrar alertas -->
     <h2>Alertas Activas</h2>
     {% if alertas %}
         <ul>
@@ -82,5 +82,37 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Sección de Seguimientos -->
+    <h2>Seguimientos Recientes</h2>
+    {% if seguimientos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Medicamento</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Final</th>
+                    <th>Stock Final</th>
+                    <th>Frecuencia (hrs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seguimiento in seguimientos %}
+                    <tr>
+                        <td>{{ seguimiento.nombre }}</td>
+                        <td>{{ seguimiento.fecha_inicio }}</td>
+                        <td>{{ seguimiento.fecha_final }}</td>
+                        <td>{{ seguimiento.stock_final }}</td>
+                        <td>{{ seguimiento.frecuencia }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay seguimientos recientes disponibles.</p>
+    {% endif %}
+
+    <!-- Enlace para ver todos los seguimientos -->
+    <a href="{{ url_for('seguimientos') }}">Ver Todos los Seguimientos</a>
 </body>
 </html>

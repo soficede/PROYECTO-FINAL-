@@ -1,5 +1,7 @@
 from Modelo import Usuario
 from Modelo import Medicamento
+from Modelo import SeguimientoMedicamento
+from datetime import datetime
 
 class ControladorUsuario:
     def __init__(self):
@@ -38,3 +40,17 @@ class ControladorMedicamento:
     def editar_medicamento(self, id, nombre=None, dosis=None, frecuencia=None, fecha_vencimiento=None, stock=None):
         medicamento = Medicamento(id=id)
         return medicamento.modificarMedicamento(nombre, dosis, frecuencia, fecha_vencimiento, stock)
+
+class ControladorSeguimiento:
+    def __init__(self):
+        pass
+
+    def crear_seguimiento(self, medicamento_id, fecha_ingreso, frecuencia, stock):
+        # Crear un objeto SeguimientoMedicamento
+        seguimiento = SeguimientoMedicamento(medicamento_id, fecha_ingreso, frecuencia, stock)
+        return seguimiento.guardarSeguimientoEnBD()
+
+    def obtener_seguimientos(self, medicamento_id=None):
+        # Crear un objeto SeguimientoMedicamento y obtener los seguimientos
+        seguimiento = SeguimientoMedicamento(medicamento_id, None, None, None)
+        return seguimiento.verSeguimientos(medicamento_id)

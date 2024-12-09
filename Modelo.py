@@ -273,11 +273,11 @@ class Alerta:
             alertas = cursor.fetchall()
             conexion.close()
 
-            for alerta in alertas:
-                estado = "Leída" if alerta['estado'] else "No Leída"
-                print(f"ID: {alerta['id']}, Tipo: {alerta['tipo']}, Mensaje: {alerta['mensaje']}, Estado: {estado}")
+            return alertas  # Cambiar para devolver las alertas en lugar de solo imprimirlas
         except mysql.connector.Error as err:
             print(f"Error al listar alertas: {err}")
+            return []
+
 
     def marcarComoLeida(self, alerta_id):
         """Marca una alerta como leída en la base de datos"""
