@@ -263,7 +263,7 @@ body.register-page {
 }
 
 .logo-ingreso {
-    width: 1000px;
+    width: 900px;
     height: auto;
     margin-bottom: 20px;
 }
@@ -323,4 +323,101 @@ body.register-page {
 
 .btn-ingresar:hover {
     background-color: #2a3d32;
+}
+
+/* Estilos específicos para la página de usuario */
+body.usuario-page {
+    background-color: #37586b; /* Fondo de la página de usuario */
+    color: white; /* Color del texto */
+}
+
+.header-ingresar {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.logo-ingreso {
+    width: 800px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Contenedor principal que contiene las secciones de medicamentos y seguimiento */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+/* Recuadro de Medicamentos */
+.medicamentos, .seguimiento {
+    background-color: white;
+    padding: 20px;
+    margin: 20px;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medicamentos h2, .seguimiento h2 {
+    text-align: center;
+    color: #37586b;
+    margin-bottom: 20px;
+}
+
+/* Tabla de Medicamentos y Seguimiento */
+.med-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.med-table th, .med-table td {
+    border: 1px solid #37586b;
+    padding: 10px;
+    text-align: center;
+}
+
+.med-table th {
+    background-color: #37586b;
+    color: white;
+}
+
+.med-table td {
+    background-color: #f9f9f9;
+}
+
+/* Botones de acción */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-end;
+    margin-top: 40px;
+    margin-right: 40px;
+}
+
+.action-buttons button {
+    padding: 10px 20px;
+    background-color: #37586b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 200px;
+}
+
+.action-buttons button:hover {
+    background-color: #d76b73;
+}
+
+/* Botón de cerrar sesión */
+.btn-salir {
+    background-color: #e76f62;
+    width: auto;
+    margin-top: 20px;
+}
+
+.btn-salir:hover {
+    background-color: #cc5c4e;
 }

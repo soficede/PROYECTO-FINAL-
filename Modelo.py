@@ -92,6 +92,7 @@ class Medicamento:
             print(f"Error al conectar con la base de datos: {err}")
             return []
 
+
     def buscarMedicamentoPorID(self, medicamento_id):
         """ Busca un medicamento por su ID """
         try:
@@ -450,3 +451,6 @@ class SeguimientoMedicamento:
                 print("-" * 40)
         except mysql.connector.Error as err:
             print(f"Error al buscar seguimientos: {err}")
+
+
+
