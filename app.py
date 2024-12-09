@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from Controlador import ControladorUsuario, ControladorMedicamento
+from Controlador import ControladorUsuario
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta"
@@ -41,39 +41,10 @@ def registrarse():
             flash("El usuario ya existe. Intenta con otro nombre.", "error")
     return render_template("registrarse.html")
 
-# Ruta para el dashboard
-@app.route("/dashboard", methods=["GET"])
+# Ruta para el dashboard (vista después del login o registro)
+@app.route("/dashboard")
 def dashboard():
-    controlador = ControladorMedicamento()
-    medicamentos = controlador.listar_medicamentos()
-    return render_template("usuario.html", medicamentos=medicamentos)
-
-# Ruta para eliminar un medicamento
-@app.route("/eliminar_medicamento", methods=["POST"])
-def eliminar_medicamento():
-    id_medicamento = request.form.get("id")
-    controlador = ControladorMedicamento()
-    if controlador.eliminar_medicamento(id_medicamento):
-        flash("Medicamento eliminado exitosamente", "success")
-    else:
-        flash("Error al eliminar el medicamento", "error")
-    return redirect(url_for("dashboard"))
-
-# Ruta para agregar un medicamento
-@app.route("/agregar_medicamento", methods=["POST"])
-def agregar_medicamento():
-    nombre = request.form.get("nombre")
-    dosis = request.form.get("dosis")
-    frecuencia = request.form.get("frecuencia")
-    fecha_vencimiento = request.form.get("fecha_vencimiento")
-    stock = int(request.form.get("stock"))
-
-    controlador = ControladorMedicamento()
-    if controlador.agregar_medicamento(nombre, dosis, frecuencia, fecha_vencimiento, stock):
-        flash("Medicamento agregado exitosamente", "success")
-    else:
-        flash("Error al agregar el medicamento", "error")
-    return redirect(url_for("dashboard"))
+    return "Bienvenido al Sistema de Gestión y Seguimiento de Medicamentos"
 
 if __name__ == "__main__":
     app.run(debug=True)

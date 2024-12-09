@@ -3,18 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SGSM - Usuario</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <title>SGSM - Inicio</title>
+        <link rel="stylesheet" href="styles.css">
     </head>
 <body class="usuario-page">
     <div class="container">
         <!-- Encabezado -->
         <div class="header-ingresar">
-            <img src="{{ url_for('static', filename='logousuario.jpg') }}" alt="Logo Usuario" class="logo-ingreso">
+            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\logousuario.jpg" alt="Logo Usuario" class="logo-ingreso">
         </div>
 
         <div class="main">
             <h1>Bienvenid@ al Sistema de Gestión y Seguimiento de Medicamentos</h1>
+            <ul class="features">
         </div>
 
         <!-- Contenedor de Información de Medicamentos y Seguimiento -->
@@ -40,19 +41,15 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table>        
 
-        <!-- Formulario para agregar medicamento -->
-        <form action="/agregar_medicamento" method="POST">
-            <h3>Agregar Medicamento</h3>
-            <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="text" name="dosis" placeholder="Dosis" required>
-            <input type="text" name="frecuencia" placeholder="Frecuencia" required>
-            <input type="date" name="fecha_vencimiento" required>
-            <input type="number" name="stock" placeholder="Stock" required>
-            <button type="submit">Agregar</button>
-        </form>
+        <!-- Botones de Acción -->
+        <div class="action-buttons">
+            <button class="btn-agregar">Agregar Medicamento</button>
+            <button class="btn-modificar">Modificar Medicamento</button>
+            <button class="btn-actualizar-stock">Actualizar Stock</button>
+            <a href="index.html"><button class="btn-salir">Cerrar Sesión</button></a>
+        </div>
     </div>
 </body>
 </html>
-
