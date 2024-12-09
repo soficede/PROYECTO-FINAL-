@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SGSM - Inicio</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGSM - Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 <body class="usuario-page">
     <div class="container">
         <!-- Encabezado -->
         <div class="header-ingresar">
-            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\logousuario.jpg" alt="Logo Usuario" class="logo-ingreso">
+            <img src="{{ url_for('static', filename='logousuario.jpg') }}" alt="Logo Usuario" class="logo-ingreso">
         </div>
 
         <div class="main">
             <h1>Bienvenid@ al Sistema de Gestión y Seguimiento de Medicamentos</h1>
-            <ul class="features">
         </div>
 
         <!-- Contenedor de Información de Medicamentos y Seguimiento -->
@@ -33,7 +32,7 @@
                     <td>{{ medicamento['id'] }}</td>
                     <td>{{ medicamento['nombre'] }}</td>
                     <td>
-                        <form action="/eliminar_medicamento" method="POST" style="display:inline;">
+                        <form action="{{ url_for('eliminar_medicamento') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="id" value="{{ medicamento['id'] }}">
                             <button type="submit">Eliminar</button>
                         </form>
@@ -45,11 +44,12 @@
 
         <!-- Botones de Acción -->
         <div class="action-buttons">
-            <button class="btn-agregar">Agregar Medicamento</button>
-            <button class="btn-modificar">Modificar Medicamento</button>
-            <button class="btn-actualizar-stock">Actualizar Stock</button>
-            <a href="index.html"><button class="btn-salir">Cerrar Sesión</button></a>
+            <a href="{{ url_for('agregar_medicamento') }}"><button class="btn-agregar">Agregar Medicamento</button></a>
+            <a href="{{ url_for('modificar_medicamento') }}"><button class="btn-modificar">Modificar Medicamento</button></a>
+            <a href="{{ url_for('actualizar_stock') }}"><button class="btn-actualizar-stock">Actualizar Stock</button></a>
+            <a href="{{ url_for('index') }}"><button class="btn-salir">Cerrar Sesión</button></a>
         </div>
     </div>
 </body>
 </html>
+
