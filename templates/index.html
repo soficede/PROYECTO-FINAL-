@@ -1,58 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGSM - Inicio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Inicio</title>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <img src="{{ url_for('static', filename='logoinicio.jpeg') }}" alt="Logo" class="logo">
-            <div class="buttons">
-                <a href="{{ url_for('ingresar') }}">
-                    <button class="btn ingresar">Ingresar</button>
-                </a>
-                <a href="{{ url_for('registrarse') }}">
-                    <button class="btn registrarse">Registrarse</button>
-                </a>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main">
-            <h1>Aquí puedes gestionar y llevar el seguimiento de tus medicamentos o los de tus pacientes</h1>
-            <ul class="features">
-                <li>
-                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
-                    Gestión de medicamentos
-                </li>
-                <li>
-                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
-                    Alerta de medicación
-                </li>
-                <li>
-                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
-                    Seguimiento de las dosis
-                </li>
-                <li>
-                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
-                    Alertas por vencimiento de medicamentos
-                </li>
-            </ul>
-            <img src="{{ url_for('static', filename='pastas.jpeg') }}" alt="Pastillas" class="pastas">
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <img src="{{ url_for('static', filename='viejitos.jpeg') }}" alt="Información adicional" class="footer-img">
-            <a href="{{ url_for('registrarse') }}">
-                <button class="ver-mas">Ver más ➡</button>
-            </a>
-        </div>
-    </div>
+    <h1>Bienvenido</h1>
+    <button onclick="location.href='/ingresar'">Ingresar</button>
+    <button onclick="location.href='/registrarse'">Registrarse</button>
 </body>
 </html>
-

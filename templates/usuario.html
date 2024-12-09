@@ -1,55 +1,64 @@
 <!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SGSM - Inicio</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-<body class="usuario-page">
-    <div class="container">
-        <!-- Encabezado -->
-        <div class="header-ingresar">
-            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\logousuario.jpg" alt="Logo Usuario" class="logo-ingreso">
-        </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Medicamentos</title>
+</head>
+<body>
+    <h1>Bienvenido a la Gestión de Medicamentos</h1>
+    
+    <!-- Formulario para agregar un medicamento -->
+    <form action="/agregar_medicamento" method="POST">
+        <h2>Agregar Medicamento</h2>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br>
+        <label for="dosis">Dosis:</label>
+        <input type="text" id="dosis" name="dosis" required>
+        <br>
+        <label for="frecuencia">Frecuencia:</label>
+        <input type="text" id="frecuencia" name="frecuencia" required>
+        <br>
+        <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
+        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" required>
+        <br>
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" required>
+        <br>
+        <button type="submit">Guardar Medicamento</button>
+    </form>
 
-        <div class="main">
-            <h1>Bienvenid@ al Sistema de Gestión y Seguimiento de Medicamentos</h1>
-            <ul class="features">
-        </div>
-
-        <!-- Contenedor de Información de Medicamentos y Seguimiento -->
-        <table class="med-table">
-            <thead>
+    <!-- Mostrar lista de medicamentos -->
+    <h2>Lista de Medicamentos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Dosis</th>
+                <th>Frecuencia</th>
+                <th>Fecha Vencimiento</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicamento in medicamentos %}
                 <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for medicamento in medicamentos %}
-                <tr>
-                    <td>{{ medicamento['id'] }}</td>
-                    <td>{{ medicamento['nombre'] }}</td>
+                    <td>{{ medicamento.id }}</td>
+                    <td>{{ medicamento.nombre }}</td>
+                    <td>{{ medicamento.dosis }}</td>
+                    <td>{{ medicamento.frecuencia }}</td>
+                    <td>{{ medicamento.fecha_vencimiento }}</td>
+                    <td>{{ medicamento.stock }}</td>
                     <td>
-                        <form action="/eliminar_medicamento" method="POST" style="display:inline;">
-                            <input type="hidden" name="id" value="{{ medicamento['id'] }}">
-                            <button type="submit">Eliminar</button>
-                        </form>
+                        <a href="/editar_medicamento/{{ medicamento.id }}">Editar</a>
+                        <a href="/eliminar_medicamento/{{ medicamento.id }}">Eliminar</a>
                     </td>
                 </tr>
-                {% endfor %}
-            </tbody>
-        </table>        
-
-        <!-- Botones de Acción -->
-        <div class="action-buttons">
-            <button class="btn-agregar">Agregar Medicamento</button>
-            <button class="btn-modificar">Modificar Medicamento</button>
-            <button class="btn-actualizar-stock">Actualizar Stock</button>
-            <a href="index.html"><button class="btn-salir">Cerrar Sesión</button></a>
-        </div>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

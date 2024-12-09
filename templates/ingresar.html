@@ -1,36 +1,20 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGSM - Ingresar</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Ingresar</title>
 </head>
-<body class="login-page">
-    <div class="container">
-        <div class="header-ingresar">
-            <img src="{{ url_for('static', filename='logoingreso.jpeg') }}" alt="Logo Ingresar" class="logo-ingreso">
-        </div>
-        <div class="form-container">
-            <form method="POST" action="/">
-                <h1>USUARIO:</h1>
-                <input type="text" name="usuario" class="input-field" placeholder="Ingresa tu usuario" required>
-                <h1>CONTRASEÑA:</h1>
-                <input type="password" name="contraseña" class="input-field" placeholder="Ingresa tu contraseña" required>
-                <div class="login-footer">
-                    <button type="submit" class="btn ingresar">Ingresar</button>
-                </div>
-                {% with messages = get_flashed_messages(with_categories=True) %}
-                {% if messages %}
-                    <ul class="flash-messages">
-                        {% for category, message in messages %}
-                        <li class="{{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                {% endwith %}
-            </form>
-        </div>
-    </div>
+<body>
+    <h1>Iniciar Sesión</h1>
+    <form action="/validar" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br>
+        <label for="contraseña">Contraseña:</label>
+        <input type="password" id="contraseña" name="contraseña" required>
+        <br>
+        <button type="submit">Ingresar</button>
+    </form>
 </body>
 </html>
