@@ -4,8 +4,13 @@ from Controlador import ControladorUsuario
 app = Flask(__name__)
 app.secret_key = "clave_secreta"
 
+# Ruta para la página de inicio
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 # Ruta para la página de inicio de sesión
-@app.route("/", methods=["GET", "POST"])
+@app.route("/ingresar", methods=["GET", "POST"])
 def ingresar():
     if request.method == "POST":
         nombre = request.form.get("usuario")
@@ -14,20 +19,12 @@ def ingresar():
         
         if controlador.validar_usuario(nombre, contraseña):
             flash("Ingreso exitoso", "success")
-            return redirect(url_for("dashboard"))  # Cambia 'dashboard' por tu siguiente vista
+            return redirect(url_for("dashboard"))
         else:
             flash("Usuario o contraseña incorrectos", "error")
     return render_template("ingresar.html")
 
-# Ruta para la siguiente página después del login
-@app.route("/dashboard")
-def dashboard():
-    return "Bienvenido al Sistema de Gestión y Seguimiento de Medicamentos"
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
+# Ruta para la página de registro
 @app.route("/registrarse", methods=["GET", "POST"])
 def registrarse():
     if request.method == "POST":
@@ -42,25 +39,9 @@ def registrarse():
             return redirect(url_for("ingresar"))
         else:
             flash("El usuario ya existe. Intenta con otro nombre.", "error")
-    
     return render_template("registrarse.html")
 
-# Ruta para iniciar sesión
-@app.route("/", methods=["GET", "POST"])
-def ingresar():
-    if request.method == "POST":
-        nombre = request.form.get("usuario")
-        contraseña = request.form.get("contraseña")
-        controlador = ControladorUsuario()
-        
-        if controlador.validar_usuario(nombre, contraseña):
-            flash("Ingreso exitoso", "success")
-            return redirect(url_for("dashboard"))
-        else:
-            flash("Usuario o contraseña incorrectos", "error")
-    return render_template("ingresar.html")
-
-# Ruta para el dashboard (próxima vista después de registro o inicio de sesión)
+# Ruta para el dashboard (vista después del login o registro)
 @app.route("/dashboard")
 def dashboard():
     return "Bienvenido al Sistema de Gestión y Seguimiento de Medicamentos"
