@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGSM - Usuario</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SGSM - Usuario</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
 <body class="usuario-page">
     <div class="container">
         <!-- Encabezado -->
@@ -32,7 +32,7 @@
                     <td>{{ medicamento['id'] }}</td>
                     <td>{{ medicamento['nombre'] }}</td>
                     <td>
-                        <form action="{{ url_for('eliminar_medicamento') }}" method="POST" style="display:inline;">
+                        <form action="/eliminar_medicamento" method="POST" style="display:inline;">
                             <input type="hidden" name="id" value="{{ medicamento['id'] }}">
                             <button type="submit">Eliminar</button>
                         </form>
@@ -40,15 +40,18 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>        
+        </table>
 
-        <!-- Botones de Acción -->
-        <div class="action-buttons">
-            <a href="{{ url_for('agregar_medicamento') }}"><button class="btn-agregar">Agregar Medicamento</button></a>
-            <a href="{{ url_for('modificar_medicamento') }}"><button class="btn-modificar">Modificar Medicamento</button></a>
-            <a href="{{ url_for('actualizar_stock') }}"><button class="btn-actualizar-stock">Actualizar Stock</button></a>
-            <a href="{{ url_for('index') }}"><button class="btn-salir">Cerrar Sesión</button></a>
-        </div>
+        <!-- Formulario para agregar medicamento -->
+        <form action="/agregar_medicamento" method="POST">
+            <h3>Agregar Medicamento</h3>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="dosis" placeholder="Dosis" required>
+            <input type="text" name="frecuencia" placeholder="Frecuencia" required>
+            <input type="date" name="fecha_vencimiento" required>
+            <input type="number" name="stock" placeholder="Stock" required>
+            <button type="submit">Agregar</button>
+        </form>
     </div>
 </body>
 </html>
