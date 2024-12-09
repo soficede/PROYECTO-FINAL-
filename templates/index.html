@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SGSM - Inicio</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\logoinicio.jpeg" alt="Logo" class="logo">
+            <img src="{{ url_for('static', filename='logoinicio.jpeg') }}" alt="Logo" class="logo">
             <div class="buttons">
-                <a href="ingresar.html">
+                <a href="{{ url_for('ingresar') }}">
                     <button class="btn ingresar">Ingresar</button>
                 </a>
-                <a href="registrarse.html">
+                <a href="{{ url_for('registrarse') }}">
                     <button class="btn registrarse">Registrarse</button>
                 </a>
             </div>
@@ -26,32 +26,33 @@
             <h1>Aquí puedes gestionar y llevar el seguimiento de tus medicamentos o los de tus pacientes</h1>
             <ul class="features">
                 <li>
-                    <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulo.jpeg" alt="Chulo">
+                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
                     Gestión de medicamentos
                 </li>
                 <li>
-                    <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulo.jpeg" alt="Chulo">
+                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
                     Alerta de medicación
                 </li>
                 <li>
-                    <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulo.jpeg" alt="Chulo">
+                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
                     Seguimiento de las dosis
                 </li>
                 <li>
-                    <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulo.jpeg" alt="Chulo">
+                    <img src="{{ url_for('static', filename='chulo.jpeg') }}" alt="Chulo">
                     Alertas por vencimiento de medicamentos
                 </li>
             </ul>
-            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\pastas.jpeg" alt="Pastillas" class="pastas">
+            <img src="{{ url_for('static', filename='pastas.jpeg') }}" alt="Pastillas" class="pastas">
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\viejitos.jpeg" alt="Información adicional" class="footer-img">
-            <a href="ver-mas.html">
+            <img src="{{ url_for('static', filename='viejitos.jpeg') }}" alt="Información adicional" class="footer-img">
+            <a href="{{ url_for('registrarse') }}">
                 <button class="ver-mas">Ver más ➡</button>
             </a>
         </div>
     </div>
 </body>
 </html>
+
