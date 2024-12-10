@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from Controlador import ControladorUsuario, ControladorMedicamento, ControladorSeguimiento  # Importar ControladorSeguimiento
 from Modelo import Alerta
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.secret_key = "secret_key"  # Para usar mensajes flash
@@ -11,6 +12,7 @@ controlador_usuario = ControladorUsuario()
 controlador_medicamento = ControladorMedicamento()
 controlador_seguimiento = ControladorSeguimiento()  # Instancia del controlador de seguimiento
 
+# Ruta principal
 @app.route('/')
 def index():
     alerta_obj = Alerta()
@@ -18,6 +20,22 @@ def index():
     alertas = alerta_obj.listarAlertas()
     return render_template('index.html', alertas=alertas)
 
+# Ruta para el archivo UML
+@app.route('/Archivos/UML.html')
+def abrir_uml():
+    return send_from_directory(os.path.join(app.root_path, 'Archivos'), 'UML.html')
+
+# Ruta para el archivo Informe.pdf
+@app.route('/Archivos/Informe.pdf')
+def abrir_informe():
+    return send_from_directory(os.path.join(app.root_path, 'Archivos'), 'Informe.pdf')
+
+# Ruta para el archivo Manual.pdf
+@app.route('/Archivos/Manual.pdf')
+def abrir_manual():
+    return send_from_directory(os.path.join(app.root_path, 'Archivos'), 'Manual.pdf')
+
+# Rutas para otros manejos
 @app.route('/ingresar')
 def ingresar():
     return render_template('ingresar.html')
