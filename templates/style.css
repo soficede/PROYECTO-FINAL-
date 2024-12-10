@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #2D5C72; /* Color azul del fondo */
+    color: white;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #2D5C72; /* Fondo principal */
+}
+
+header img {
+    width: 50px; /* Tamaño del logo */
+    height: auto;
+}
+
+header button {
+    background-color: #F26565; /* Botones superiores rojos */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+header button:nth-child(2) {
+    background-color: #21392C; /* Botón verde oscuro */
+}
+
+main {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+main h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+main .features {
+    margin: 30px auto;
+    text-align: left;
+    max-width: 600px;
+}
+
+main .features img {
+    width: 20px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+main .features li {
+    list-style: none;
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.sidebar {
+    position: absolute;
+    right: 0;
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.sidebar img {
+    width: 120px; /* Tamaño de las pastas */
+    margin: 10px 20px;
+}
+
+footer {
+    background-color: white; /* Fondo blanco inferior */
+    color: black;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+footer img {
+    width: 80px; /* Tamaño de iconos en la parte inferior */
+    height: auto;
+}
+
+footer p {
+    font-size: 14px;
+}
+
+footer button {
+    background-color: #21392C; /* Botón manual */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+footer button:hover {
+    background-color: #F26565; /* Efecto hover rojo */
+}

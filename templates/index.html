@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Inicio</title>
 </head>
 <body>
-    <h1>Bienvenido</h1>
-    <button onclick="location.href='/ingresar'">Ingresar</button>
-    <button onclick="location.href='/registrarse'">Registrarse</button>
-    <!-- Botón UML -->
-    <button onclick="location.href='/Archivos/UML.html'">UML</button>
-    <!-- Botón Informe -->
-    <button onclick="window.location.href='/Archivos/Informe.pdf'" target="_blank">Informe</button>
-    <!-- Botón Manual -->
-    <button onclick="window.location.href='/Archivos/Manual.pdf'" target="_blank">Manual</button>
+    <header>
+        <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\INICIO.jpeg" alt="Logo SGSM">
+        <div class="buttons">
+            <button onclick="location.href='/Archivos/UML.html'">UML</button>
+            <button onclick="window.location.href='/Archivos/Informe.pdf'" target="_blank">Informe</button>
+            <button onclick="location.href='/ingresar'">Ingresar</button>
+            <button onclick="location.href='/registrarse'">Registrarse</button>
+        </div>
+    </header>
+    <div class="main-container">
+        <h1>Aquí puedes gestionar y llevar el seguimiento de tus medicamentos o los de tus pacientes</h1>
+        <ul class="features">
+            <li><img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulos.jpeg" alt="Chulo">Gestión de medicamentos</li>
+            <li><img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulos.jpeg" alt="Chulo">Alerta de medicación</li>
+            <li><img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulos.jpeg" alt="Chulo">Seguimiento de las dosis</li>
+            <li><img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\chulos.jpeg" alt="Chulo">Alertas por vencimiento de medicamentos</li>
+        </ul>
+        <img class="pills" src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\pastas.jpeg" alt="Pastillas">
+    </div>
+    <footer>
+        <img src="C:\Users\sofia\Desktop\PROYECTO-FINAL-\templates\viejitos.jpeg" alt="Footer Imagen">
+    </footer>
 </body>
 </html>
