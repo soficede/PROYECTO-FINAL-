@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ingresar</title>
+    <link rel="stylesheet" href="static/style_ingresar.css">
 </head>
 <body>
-    <h1>Iniciar Sesión</h1>
-    <form action="/validar" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <br>
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña" required>
-        <br>
-        <button type="submit">Ingresar</button>
-    </form>
+    <div class="container">
+        <h1>Iniciar Sesión</h1>
+        <form action="/validar" method="POST" class="login-form">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+            
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" placeholder="Ingresa tu contraseña" required>
+            
+            <button type="submit">Ingresar</button>
+        </form>
+    </div>
 </body>
 </html>

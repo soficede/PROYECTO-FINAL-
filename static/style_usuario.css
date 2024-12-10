@@ -1,0 +1,119 @@
+/* General */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #37586b;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Alertas */
+.alertas .alert-list {
+    list-style: none;
+    padding: 0;
+}
+
+.alertas .alert-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.alertas .btn-link {
+    text-decoration: none;
+    color: #37586b;
+    margin-left: 10px;
+}
+
+.alertas .btn-link.danger {
+    color: #c54d4d;
+}
+
+/* Formularios */
+.form-section label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-section input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.btn-submit {
+    background: #37586b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-submit:hover {
+    background: #1b3029;
+}
+
+/* Tablas */
+.table-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-section th, .table-section td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.table-section th {
+    background-color: #37586b;
+    color: #fff;
+}
+
+.table-section tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* Botones principales */
+.btn-main {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background: #37586b;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.btn-main:hover {
+    background: #1b3029;
+}

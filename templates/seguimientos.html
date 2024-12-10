@@ -1,22 +1,36 @@
-<h2>Seguimientos de Medicamentos</h2>
-{% if seguimientos %}
-    <ul>
-        {% for seguimiento in seguimientos %}
-            <li>
-                <strong>{{ seguimiento['nombre'] }}</strong> (ID: {{ seguimiento['medicamento_id'] }})
-                <br>
-                Fecha de inicio: {{ seguimiento['fecha_inicio'] }}
-                <br>
-                Fecha final: {{ seguimiento['fecha_final'] }}
-                <br>
-                Stock final: {{ seguimiento['stock_final'] }}
-                <br>
-                Frecuencia: Cada {{ seguimiento['frecuencia'] }} horas
-                <br>
-                <hr>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No hay seguimientos disponibles.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimientos de Medicamentos</title>
+    <link rel="stylesheet" href="static/style_usuario.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Seguimientos de Medicamentos</h2>
+
+        {% if seguimientos %}
+            <ul class="seguimientos-lista">
+                {% for seguimiento in seguimientos %}
+                    <li class="seguimiento-item">
+                        <strong>{{ seguimiento['nombre'] }}</strong> (ID: {{ seguimiento['medicamento_id'] }})
+                        <br>
+                        <span><strong>Fecha de inicio:</strong> {{ seguimiento['fecha_inicio'] }}</span>
+                        <br>
+                        <span><strong>Fecha final:</strong> {{ seguimiento['fecha_final'] }}</span>
+                        <br>
+                        <span><strong>Stock final:</strong> {{ seguimiento['stock_final'] }}</span>
+                        <br>
+                        <span><strong>Frecuencia:</strong> Cada {{ seguimiento['frecuencia'] }} horas</span>
+                        <br>
+                        <hr class="separador">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay seguimientos disponibles.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

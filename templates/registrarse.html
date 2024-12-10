@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
+    <link rel="stylesheet" href="static/style_registrarse.css">
 </head>
 <body>
-    <h1>Registrarse</h1>
-    <form action="/guardar" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <br>
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña" required>
-        <br>
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo" required>
-        <br>
-        <label for="rol">Rol:</label>
-        <input type="text" id="rol" name="rol" required>
-        <br>
-        <button type="submit">Registrarse</button>
-    </form>
+    <div class="container">
+        <h1>Registrarse</h1>
+        <form action="/guardar" method="POST" class="register-form">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+            
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" placeholder="Crea una contraseña" required>
+            
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required>
+            
+            <label for="rol">Rol:</label>
+            <input type="text" id="rol" name="rol" placeholder="Especifica tu rol" required>
+            
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
 </body>
 </html>

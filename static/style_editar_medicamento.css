@@ -1,0 +1,83 @@
+/* General */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #37586b;
+}
+
+/* Formulario */
+.form-medicamento {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-medicamento label {
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-medicamento input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.form-medicamento input::placeholder {
+    color: #aaa;
+}
+
+/* Botones */
+.btn-submit {
+    background: #37586b;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background: #2c4a57;
+}
+
+.btn-cancel {
+    display: inline-block;
+    margin-top: 15px;
+    color: #c54d4d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.btn-cancel:hover {
+    color: #a33b3b;
+}

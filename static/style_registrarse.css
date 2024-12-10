@@ -1,0 +1,75 @@
+/* General */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Título */
+.container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #37586b;
+}
+
+/* Formulario */
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form label {
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-size: 1rem;
+}
+
+.register-form input {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.register-form input:focus {
+    border-color: #37586b;
+    outline: none;
+}
+
+/* Botón */
+.register-form button {
+    background-color: #37586b;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-form button:hover {
+    background-color: #1b3029;
+}

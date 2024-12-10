@@ -4,26 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Medicamento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_editar_medicamento.css') }}">
 </head>
 <body>
-    <h1>Editar Medicamento</h1>
-    <form action="" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="{{ medicamento.nombre }}" required>
-        <br>
-        <label for="dosis">Dosis:</label>
-        <input type="text" id="dosis" name="dosis" value="{{ medicamento.dosis }}" required>
-        <br>
-        <label for="frecuencia">Frecuencia:</label>
-        <input type="text" id="frecuencia" name="frecuencia" value="{{ medicamento.frecuencia }}" required>
-        <br>
-        <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
-        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ medicamento.fecha_vencimiento }}" required>
-        <br>
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" value="{{ medicamento.stock }}" required>
-        <br>
-        <button type="submit">Guardar cambios</button>
-    </form>
+    <div class="container">
+        <h1>Editar Medicamento</h1>
+        <form action="" method="POST" class="form-medicamento">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ medicamento.nombre }}" required placeholder="Nombre del medicamento">
+
+            <label for="dosis">Dosis:</label>
+            <input type="text" id="dosis" name="dosis" value="{{ medicamento.dosis }}" required placeholder="Ej. 500 mg">
+
+            <label for="frecuencia">Frecuencia:</label>
+            <input type="text" id="frecuencia" name="frecuencia" value="{{ medicamento.frecuencia }}" required placeholder="Ej. Cada 8 horas">
+
+            <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
+            <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ medicamento.fecha_vencimiento }}" required>
+
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" value="{{ medicamento.stock }}" required placeholder="Cantidad en inventario">
+
+            <button type="submit" class="btn-submit">Guardar Cambios</button>
+        </form>
+        <a href="{{ url_for('usuario') }}" class="btn-cancel">Cancelar</a>
+    </div>
 </body>
 </html>
