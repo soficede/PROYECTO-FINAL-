@@ -1,0 +1,148 @@
+/* General */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #37586b;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px 40px;
+    background-color: #37586b;
+    box-sizing: border-box;
+}
+
+header img {
+    width: 500px;
+    height: auto;
+}
+
+header .buttons {
+    display: flex;
+    gap: 15px;
+}
+
+header .buttons button {
+    background-color: #13251F;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+header .buttons button:hover {
+    background-color: #1B3029;
+}
+
+header .buttons button:nth-child(2) {
+    background-color: #C54D4D;
+}
+
+header .buttons button:nth-child(2):hover {
+    background-color: #D96E6E;
+}
+
+/* Main Section */
+.main-container {
+    text-align: left;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.main-container h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.main-container ul {
+    list-style: none;
+    padding: 0;
+    max-width: 6000px;
+    margin: 10px auto;
+    text-align: left;
+}
+
+.main-container ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.main-container ul li img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.pills {
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    width: 120px;
+    height: auto;
+}
+
+/* Footer */
+footer {
+    background-color: #fefefe;
+    color: #000;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+footer div {
+    text-align: center;
+}
+
+footer div img {
+    width: 3px; 
+    height: 3px; 
+    margin: auto;
+    display: block;
+}
+
+footer div p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+footer .manual {
+    background-color: #37586b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+footer .manual:hover {
+    background-color: #1B3029;
+}
+
